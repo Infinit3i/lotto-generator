@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app:/usr/share/nginx/html
+    environment:
+      - NODE_ENV=production
+
+  scraper:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - ./scraper:/app
+    command: "npm start"
