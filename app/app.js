@@ -5,8 +5,8 @@ const generateButton = document.getElementById('generate-button');
 const generatedNumbers = document.getElementById('generated-numbers');
 
 // API Endpoints
-const powerballAPI = 'https://example.com/api/powerball';
-const megaMillionsAPI = 'https://example.com/api/megamillions';
+const powerballAPI = 'https://www.powerball.com/';
+const megaMillionsAPI = 'https://www.megamillions.com/';
 
 // Fetch data from APIs
 async function fetchData(api) {
@@ -31,25 +31,38 @@ function updateStatistics(data, targetElement) {
 }
 
 // Generate random numbers
-function generateRandomNumbers() {
-    const randomNumbers = Array.from({ length: 5 }, () => Math.floor(Math.random() * 69) + 1);
-    const powerball = Math.floor(Math.random() * 26) + 1;
-    generatedNumbers.textContent = `Numbers: ${randomNumbers.join(', ')} | Powerball: ${powerball}`;
+function generateRandomNumbers(isPowerball = true) {
+    const numberRange = isPowerball ? 69 : 70;
+    const specialRange = isPowerball ? 26 : 25;
+
+    const randomNumbers = Array.from({ length: 5 }, () => Math.floor(Math.random() * numberRange) + 1);
+    const specialNumber = Math.floor(Math.random() * specialRange) + 1;
+
+    generatedNumbers.textContent = isPowerball
+        ? `Powerball Numbers: ${randomNumbers.join(', ')} | Powerball: ${specialNumber}`
+        : `MegaMillions Numbers: ${randomNumbers.join(', ')} | Mega Ball: ${specialNumber}`;
 }
+
 
 // Initialize app
 async function initialize() {
-    const powerballData = await fetchData(powerballAPI);
-    const megaMillionsData = await fetchData(megaMillionsAPI);
+    // Fetch Powerball and MegaMillions data from your backend or scraper
+    const powerballData = await fetchData('/api/powerball'); // Replace with scraper output path
+    const megaMillionsData = await fetchData('/api/megamillions'); // Replace with scraper output path
 
+    // Update UI with Powerball data
     if (powerballData) {
         updateStatistics(powerballData.mostCommon, mostCommonList);
         updateStatistics(powerballData.leastCommon, leastCommonList);
+    } else {
+        console.error('Failed to load Powerball data');
     }
 
-    // Repeat for Mega Millions data if needed
+    // Optionally handle Mega Millions data
     // if (megaMillionsData) { ... }
 }
+
+
 
 // Event Listeners
 generateButton.addEventListener('click', generateRandomNumbers);

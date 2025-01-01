@@ -11,6 +11,8 @@ services:
       - ./app:/usr/share/nginx/html
     environment:
       - NODE_ENV=production
+    depends_on:
+      - scraper  # This ensures the web service waits for scraper initialization but won't fail if the scraper exits.
 
   scraper:
     image: node:18-alpine
@@ -18,3 +20,4 @@ services:
     volumes:
       - ./scraper:/app
     command: "npm start"
+    restart: always  # Ensures scraper restarts even if it fails

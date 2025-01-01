@@ -4,7 +4,7 @@
 FROM nginx:alpine
 
 # Copy the application files to the nginx html directory
-COPY app /usr/share/nginx/html
+COPY scraper /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
